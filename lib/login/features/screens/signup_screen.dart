@@ -33,7 +33,8 @@ class _SignupScreenState extends State<SignupScreen> {
 
     // 여기에 API 연동 코드 추가 예정
     debugPrint('회원가입 요청: $name / $id / $password');
-    _showAlert("회원가입 완료!"); // 또는 context.go('/login');
+    _showAlert("회원가입 완료!");
+    context.go('/');
   }
 
   void _showAlert(String message) {
