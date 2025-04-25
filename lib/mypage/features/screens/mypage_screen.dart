@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/app_color.dart';
 import '../../../core/widgets/app_bottom_nav.dart';
+import 'package:go_router/go_router.dart';
 
 class MyPageScreen extends StatefulWidget {
   const MyPageScreen({super.key});
@@ -29,14 +30,14 @@ class _MyPageScreenState extends State<MyPageScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('로그아웃 완료')),
     );
-    Navigator.pushReplacementNamed(context, '/');
+    context.go('/');
   }
 
   void _withdraw() {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('탈퇴 완료')),
     );
-    Navigator.pushReplacementNamed(context, '/');
+    context.go('/');
   }
 
   @override
