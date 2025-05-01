@@ -3,11 +3,9 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-<<<<<<< HEAD
+  file_selector_windows
   firebase_auth
   firebase_core
-=======
->>>>>>> ca96a6bb6036b3f9a257e60df51a99864fc41c9f
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

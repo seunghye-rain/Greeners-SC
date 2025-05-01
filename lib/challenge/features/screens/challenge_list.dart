@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/widgets/app_bottom_nav.dart';
 
 class ChallengeList extends StatefulWidget {
@@ -12,11 +13,27 @@ class ChallengeList extends StatefulWidget {
 class _ChallengeListState extends State<ChallengeList> {
   late GoogleMapController mapController;
 
-  final LatLng _center = const LatLng(37.5665, 126.9780); // 서울 시청 기준 좌표
+  final LatLng _center = const LatLng(37.5665, 126.9780); // 서울 시청 기준
 
   final List<Map<String, dynamic>> challenges = [
-    {'id': '1', 'name': '분리수거 같이 해요~', 'current': 1, 'max': 5, 'location': '장소: 1', 'lat': 37.5665, 'lng': 126.9780},
-    {'id': '2', 'name': '텀블러 사용하기', 'current': 1, 'max': 8, 'location': '장소: 2', 'lat': 37.5651, 'lng': 126.9895},
+    {
+      'id': '1',
+      'name': '분리수거 같이 해요~',
+      'current': 1,
+      'max': 5,
+      'location': '장소: 1',
+      'lat': 37.5665,
+      'lng': 126.9780
+    },
+    {
+      'id': '2',
+      'name': '텀블러 사용하기',
+      'current': 1,
+      'max': 8,
+      'location': '장소: 2',
+      'lat': 37.5651,
+      'lng': 126.9895
+    },
   ];
 
   void _onMapCreated(GoogleMapController controller) {
@@ -57,28 +74,44 @@ class _ChallengeListState extends State<ChallengeList> {
                 final challenge = challenges[index];
                 return GestureDetector(
                   onTap: () {
-                    mapController.animateCamera(
-                      CameraUpdate.newLatLng(
-                        LatLng(challenge['lat'], challenge['lng']),
-                      ),
-                    );
+                    context.push('/challengedetail/${challenge['id']}');
                   },
                   child: Container(
-                    width: 150,
-                    margin: const EdgeInsets.all(8),
-                    padding: const EdgeInsets.all(8),
+                    width: 120,
+                    height: 50,
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: Colors.green[300],
+                      color: const Color(0xFF8AB78A),
                       borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 5,
+                          offset: const Offset(0, 2),
+                        )
+                      ],
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(challenge['name'].toString(), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                        Text(
+                          challenge['name'].toString(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                         const SizedBox(height: 5),
-                        Text('현재 참여: ${challenge['current']}/${challenge['max']}', style: const TextStyle(color: Colors.white)),
-                        const SizedBox(height: 5),
-                        Text(challenge['location'].toString(), style: const TextStyle(color: Colors.white)),
+                        Text(
+                          '현재 참여: ${challenge['current']}/${challenge['max']}',
+                          style: const TextStyle(color: Colors.white, fontSize: 12),
+                        ),
+                        Text(
+                          challenge['location'].toString(),
+                          style: const TextStyle(color: Colors.white, fontSize: 12),
+                        ),
                       ],
                     ),
                   ),

@@ -5,15 +5,12 @@
 import FlutterMacOS
 import Foundation
 
-<<<<<<< HEAD
+import file_selector_macos
 import firebase_auth
 import firebase_core
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
+  FileSelectorPlugin.register(with: registry.registrar(forPlugin: "FileSelectorPlugin"))
   FLTFirebaseAuthPlugin.register(with: registry.registrar(forPlugin: "FLTFirebaseAuthPlugin"))
   FLTFirebaseCorePlugin.register(with: registry.registrar(forPlugin: "FLTFirebaseCorePlugin"))
-=======
-
-func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
->>>>>>> ca96a6bb6036b3f9a257e60df51a99864fc41c9f
 }

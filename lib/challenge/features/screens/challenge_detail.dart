@@ -44,7 +44,7 @@ class ChallengeDetail extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.green[800],
             ),
-            child: const Text('참여하기'),
+            child: const Text('참여하기', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
