@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/app_color.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -36,7 +38,26 @@ class _SignupScreenState extends State<SignupScreen> {
     _showAlert("회원가입 완료!");
     context.go('/');
   }
+  Future<void> _handleGoogleSignup() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) return; // 사용자가 로그인 취소
 
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      _showAlert("구글 계정으로 회원가입 완료!");
+      context.go('/home');
+    } catch (e) {
+      debugPrint("Google 회원가입 실패: $e");
+      _showAlert("구글 회원가입에 실패했습니다.");
+    }
+  }
   void _showAlert(String message) {
     showDialog(
       context: context,
@@ -85,7 +106,7 @@ class _SignupScreenState extends State<SignupScreen> {
               _buildInputField(_passwordController, '비밀번호', obscureText: true),
               _buildInputField(_confirmPasswordController, '비밀번호 확인', obscureText: true),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 12),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -101,6 +122,16 @@ class _SignupScreenState extends State<SignupScreen> {
                     '회원가입',
                     style: TextStyle(fontSize: 18, color: Colors.white),
                   ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              GestureDetector(
+                onTap: _handleGoogleSignup,
+                child: Image.asset(
+                  'assets/google_signup.png',
+                  width: double.infinity,
+                  height: 48,
+                  fit: BoxFit.contain,
                 ),
               ),
             ],

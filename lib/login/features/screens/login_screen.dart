@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/app_color.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -30,6 +32,44 @@ class _LoginScreenState extends State<LoginScreen> {
     // API 연결 시 코드 추가할 곳
     debugPrint('로그인 요청: $id / $password');
     context.go('/home');
+  }
+
+  Future<void> _handleGoogleSignIn() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) return; // 사용자가 취소
+
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final authResult = await FirebaseAuth.instance.signInWithCredential(credential);
+      final additionalInfo = authResult.additionalUserInfo;
+      debugPrint('isNewUser: ${additionalInfo?.isNewUser}');
+
+      if (additionalInfo != null && additionalInfo.isNewUser) {
+        showDialog(
+          context: context,
+          builder: (_) => const AlertDialog(
+            content: Text("회원가입이 되지 않은 계정입니다."),
+          ),
+        );
+
+        Future.delayed(const Duration(seconds: 1, milliseconds: 500), () {
+          if (Navigator.canPop(context)) Navigator.pop(context);
+        });
+
+        await FirebaseAuth.instance.signOut();
+        await GoogleSignIn().signOut();
+        return;
+      }
+      context.go('/home');
+    } catch (e) {
+      debugPrint("Google 로그인 실패: $e");
+    }
   }
 
   @override
@@ -94,6 +134,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     '로그인',
                     style: TextStyle(fontSize: 18, color: Colors.white),
                   ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              GestureDetector(
+                onTap: _handleGoogleSignIn,
+                child: Image.asset(
+                  'assets/google_signin.png',
+                  width: double.infinity,
+                  height: 48,
+                  fit: BoxFit.contain,
                 ),
               ),
             ],
