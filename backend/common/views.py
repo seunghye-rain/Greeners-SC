@@ -4,6 +4,32 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .serializers import FirebaseLoginSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import get_user_model
+
+
+
+User = get_user_model()
+
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+
+        # 예시: 챌린지 연결 정보 포함
+        challenges = getattr(user, 'challenges', [])  # Challenge 모델과 연결된 경우
+
+        return Response({
+            'id': user.id,
+            'email': user.email,
+            'username': user.username,
+            'challenges': [
+                {
+                    'name': c.name,
+                    'status': c.status
+                } for c in challenges.all()
+            ] if hasattr(challenges, 'all') else []
+        })
 
 class FirebaseLoginView(APIView):
     permission_classes = [AllowAny]
