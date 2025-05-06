@@ -7,7 +7,7 @@ import '../login/features/screens/signup_screen.dart';
 import '../mypage/features/screens/mypage_screen.dart';
 import '../../challenge/features/screens/challenge_list.dart';
 import 'package:greeners_sc/challenge/features/screens/challenge_list.dart';
-import 'package:greeners_sc/challenge/features/screens/challenge_detail.dart' as detail;
+import 'package:greeners_sc/challenge/features/screens/challenge_detail.dart';
 import 'package:greeners_sc/challenge/features/screens/challenge_join.dart' as join;
 
 final GoRouter appRouter = GoRouter(
@@ -36,10 +36,12 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/challengedetail/:id',
       builder: (context, state) {
-        // id 없앨거면 final id 부분 삭제
-        return const detail.ChallengeDetail(); //detail. 로 접근
+        final id = int.parse(state.pathParameters['id']!);
+        return ChallengeDetail(challengeId: id);
       },
     ),
+
+
     GoRoute(
       path: '/challengejoin/:id',
       builder: (context, state) {

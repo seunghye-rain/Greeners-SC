@@ -17,7 +17,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  void _handleSignup() {
+  void _handleSignup() async{
     final name = _nameController.text;
     final id = _idController.text;
     final password = _passwordController.text;
@@ -33,10 +33,27 @@ class _SignupScreenState extends State<SignupScreen> {
       return;
     }
 
-    // 여기에 API 연동 코드 추가 예정
-    debugPrint('회원가입 요청: $name / $id / $password');
-    _showAlert("회원가입 완료!");
-    context.go('/');
+    try {
+      // Firebase에 회원가입 요청
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: id,
+        password: password,
+      );
+
+
+      // 성공 시 이동
+      context.go('/login');
+    } on FirebaseAuthException catch (e) {
+      String message = "회원가입에 실패했습니다.";
+      if (e.code == 'email-already-in-use') {
+        message = "이미 사용 중인 이메일입니다.";
+      } else if (e.code == 'weak-password') {
+        message = "비밀번호가 너무 약합니다.";
+      }
+      _showAlert(message);
+    } catch (e) {
+      _showAlert("알 수 없는 오류가 발생했습니다.");
+    }
   }
   Future<void> _handleGoogleSignup() async {
     try {

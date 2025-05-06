@@ -220,3 +220,7 @@ cython_debug/
 ### Firebase Patch ###
 .runtimeconfig.json
 .firebase/
+
+
+# Celery Beat schedule db
+celerybeat-schedule*

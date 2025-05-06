@@ -15,24 +15,55 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _idController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void _handleLogin() {
-    final id = _idController.text;
+  void _showError(String message) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text("오류"),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text("확인"),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+  void _handleLogin() async {
+    final email = _idController.text;
     final password = _passwordController.text;
 
-    if (id.isEmpty || password.isEmpty) {
-      showDialog(
-        context: context,
-        builder: (_) => const AlertDialog(
-          content: Text("아이디와 비밀번호를 입력하세요."),
-        ),
-      );
+    if (email.isEmpty || password.isEmpty) {
+      _showError("이메일과 비밀번호를 입력하세요.");
       return;
     }
 
-    // API 연결 시 코드 추가할 곳
-    debugPrint('로그인 요청: $id / $password');
-    context.go('/home');
+    try {
+      // ✅ 로그인 요청
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // ✅ 성공 시 홈으로 이동
+      context.go('/home');
+    } on FirebaseAuthException catch (e) {
+      // ✅ 실패 시 오류 메시지 표시
+      String message = "로그인에 실패했습니다.";
+      if (e.code == 'user-not-found') {
+        message = "존재하지 않는 사용자입니다.";
+      } else if (e.code == 'wrong-password') {
+        message = "비밀번호가 올바르지 않습니다.";
+      }
+      _showError(message);
+    } catch (e) {
+      _showError("알 수 없는 오류가 발생했습니다.");
+    }
   }
+
 
   Future<void> _handleGoogleSignIn() async {
     try {

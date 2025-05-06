@@ -8,3 +8,4 @@ FIREBASE_CRED_PATH = os.path.join(settings.BASE_DIR, 'firebase', 'firebase-admin
 if not firebase_admin._apps:
     cred = credentials.Certificate(FIREBASE_CRED_PATH)
     firebase_admin.initialize_app(cred)
+
