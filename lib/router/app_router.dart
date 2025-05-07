@@ -5,10 +5,9 @@ import '../login/features/screens/start_screen.dart';
 import '../login/features/screens/login_screen.dart';
 import '../login/features/screens/signup_screen.dart';
 import '../mypage/features/screens/mypage_screen.dart';
-import '../../challenge/features/screens/challenge_list.dart';
-import 'package:greeners_sc/challenge/features/screens/challenge_list.dart';
+import '../challenge/features/screens/challenge_list.dart';
 import 'package:greeners_sc/challenge/features/screens/challenge_detail.dart';
-import 'package:greeners_sc/challenge/features/screens/challenge_join.dart' as join;
+import 'package:greeners_sc/challenge/features/screens/challenge_join.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/', // 앱 처음 시작 경로
@@ -35,19 +34,33 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: '/challengedetail/:id',
+      name: 'challengedetail',
       builder: (context, state) {
         final id = int.parse(state.pathParameters['id']!);
-        return ChallengeDetail(challengeId: id);
+        final isJoined = state.extra != null && state.extra is Map<String, dynamic>
+            ? (state.extra as Map<String, dynamic>)['isJoined'] ?? false
+            : false;
+
+        return ChallengeDetail(
+          challengeId: id,
+          isJoined: isJoined,
+        );
       },
     ),
+
+
+
+
+
 
 
     GoRoute(
       path: '/challengejoin/:id',
       builder: (context, state) {
-        // id 없앨거면 final id 부분 삭제
-        return const join.ChallengeJoin(); //join. 로 접근
+        final id = int.parse(state.pathParameters['id']!);
+        return ChallengeJoin(challengeId: id);
       },
     ),
+
   ],
 );
