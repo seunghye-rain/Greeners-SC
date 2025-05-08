@@ -33,6 +33,8 @@ migrate_working_dir/
 .pub/
 /build/
 
+**/ios/Runner/Info.plist
+
 # Symbolication related
 app.*.symbols
 

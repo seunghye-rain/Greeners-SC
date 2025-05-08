@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import user_challenge_list, challenge_status, challenge_detail, join_challenge
-from . import views
+
 
 
 urlpatterns = [

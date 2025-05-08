@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:http/http.dart' as http;
 import '../../../core/app_color.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -68,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _handleGoogleSignIn() async {
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      if (googleUser == null) return; // 사용자가 취소
+      if (googleUser == null) return;
 
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
@@ -79,29 +80,44 @@ class _LoginScreenState extends State<LoginScreen> {
 
       final authResult = await FirebaseAuth.instance.signInWithCredential(credential);
       final additionalInfo = authResult.additionalUserInfo;
-      debugPrint('isNewUser: ${additionalInfo?.isNewUser}');
+
+      final idToken = await FirebaseAuth.instance.currentUser?.getIdToken();
+      if (idToken == null) {
+        throw Exception("ID 토큰을 가져올 수 없습니다");
+      }
+
+      // ✅ 유저 등록 시도
+      await registerUserOnDjango(idToken);
 
       if (additionalInfo != null && additionalInfo.isNewUser) {
-        showDialog(
-          context: context,
-          builder: (_) => const AlertDialog(
-            content: Text("회원가입이 되지 않은 계정입니다."),
-          ),
-        );
-
-        Future.delayed(const Duration(seconds: 1, milliseconds: 500), () {
-          if (Navigator.canPop(context)) Navigator.pop(context);
-        });
-
-        await FirebaseAuth.instance.signOut();
-        await GoogleSignIn().signOut();
-        return;
+        // ✅ 회원가입 안내 대신 등록 후 홈으로 이동
+        context.go('/home');
+      } else {
+        context.go('/home');
       }
-      context.go('/home');
+
     } catch (e) {
       debugPrint("Google 로그인 실패: $e");
+      _showError("Google 로그인에 실패했습니다.");
     }
   }
+
+  Future<void> registerUserOnDjango(String idToken) async {
+    final response = await http.post(
+      Uri.parse('http://10.0.2.2:8000/api/user/register/'),
+      headers: {
+        'Authorization': 'Bearer $idToken',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      print("✅ Django 서버에 유저 등록 완료");
+    } else {
+      print("❌ 유저 등록 실패: ${response.body}");
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
