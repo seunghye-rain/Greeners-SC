@@ -9,11 +9,12 @@ import '../challenge/features/screens/challenge_list.dart';
 import '../challenge/features/screens/challenge_create_screen.dart';
 import '../challenge/features/screens/challenge_recommend_screen.dart';
 import '../challenge/features/screens/challenge_select_screen.dart';
+import '../challenge/features/screens/challenge_join_ai_screen.dart';
 import 'package:greeners_sc/challenge/features/screens/challenge_detail.dart';
 import 'package:greeners_sc/challenge/features/screens/challenge_join.dart';
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: '/', // 앱 처음 시작 경로
+  initialLocation: '/',
   routes: [
     GoRoute(
       path: '/',
@@ -22,11 +23,11 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: '/login',
-      builder: (context, state) => const LoginScreen(), // 아직 작성 전
+      builder: (context, state) => const LoginScreen(),
     ),
     GoRoute(
       path: '/signup',
-      builder: (context, state) => const SignupScreen(), // 아직 작성 전
+      builder: (context, state) => const SignupScreen(),
     ),
     GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
 
@@ -56,14 +57,19 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: '/challenge/create',
-      builder: (context, state) => const ChallengeCreateScreen(), // 나중에 만들 파일
+      builder: (context, state) => const ChallengeCreateScreen(),
     ),
     GoRoute(
       path: '/challenge/recommend',
-      builder: (context, state) => const ChallengeRecommendScreen(), // 나중에 만들 파일
+      builder: (context, state) => const ChallengeRecommendScreen(),
     ),
 
-
+    GoRoute(
+      path: '/challenge/join/ai',
+      builder: (context, state) => const ChallengeJoinAiScreen(
+        challengeTitle: '기본 챌린지 제목',
+      ),
+    ),
 
 
 
