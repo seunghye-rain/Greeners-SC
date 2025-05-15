@@ -1,14 +1,23 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'firebase_options.dart';
 import 'router/app_router.dart';
 import 'core/app_color.dart';
+import 'firebase_options.dart';
+import 'package:intl/date_symbol_data_local.dart'; // 추가
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await initializeDateFormatting('ko', null);
+
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform, // firebase_options.dart 생성했을 경우
-  );
+    options: DefaultFirebaseOptions.currentPlatform,
+  ).then((_) {
+    debugPrint("✅ Firebase initialized successfully");
+  }).catchError((e) {
+    debugPrint("❌ Firebase initialization failed: $e");
+  });
+
   runApp(const MyApp());
 }
 
