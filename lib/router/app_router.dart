@@ -6,6 +6,9 @@ import '../login/features/screens/login_screen.dart';
 import '../login/features/screens/signup_screen.dart';
 import '../mypage/features/screens/mypage_screen.dart';
 import '../challenge/features/screens/challenge_list.dart';
+import '../challenge/features/screens/challenge_create_screen.dart';
+import '../challenge/features/screens/challenge_recommend_screen.dart';
+import '../challenge/features/screens/challenge_select_screen.dart';
 import 'package:greeners_sc/challenge/features/screens/challenge_detail.dart';
 import 'package:greeners_sc/challenge/features/screens/challenge_join.dart';
 
@@ -47,7 +50,18 @@ final GoRouter appRouter = GoRouter(
         );
       },
     ),
-
+    GoRoute(
+      path: '/challenge/select',
+      builder: (context, state) => const ChallengeSelectScreen(),
+    ),
+    GoRoute(
+      path: '/challenge/create',
+      builder: (context, state) => const ChallengeCreateScreen(), // 나중에 만들 파일
+    ),
+    GoRoute(
+      path: '/challenge/recommend',
+      builder: (context, state) => const ChallengeRecommendScreen(), // 나중에 만들 파일
+    ),
 
 
 

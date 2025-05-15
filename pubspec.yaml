@@ -19,6 +19,7 @@ dependencies:
   image_picker: ^1.1.2
   table_calendar: ^3.0.9
   intl: ^0.18.1
+  flutter_dotenv: ^5.0.2
 
 dev_dependencies:
   flutter_test:
@@ -32,6 +33,7 @@ flutter:
     - assets/logo.png
     - assets/google_signin.png
     - assets/google_signup.png
+    - .env
   fonts:
     - family: Money
       fonts:

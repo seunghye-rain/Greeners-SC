@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'router/app_router.dart';
 import 'core/app_color.dart';
 import 'firebase_options.dart';
-import 'package:intl/date_symbol_data_local.dart'; // 추가
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await initializeDateFormatting('ko', null);
-
+  await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   ).then((_) {

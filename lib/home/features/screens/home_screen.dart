@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import '../../../core/widgets/app_bottom_nav.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -90,13 +92,15 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.go('/challenge/select');
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                   ),
-                  child: const Text('챌린지 등록하기', style: TextStyle(fontSize: 16)),
+                  child: const Text('챌린지 등록하기', style: TextStyle(color: Colors.white, fontSize: 16)),
                 ),
               ),
               const SizedBox(height: 16)
@@ -104,6 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 1),
     );
   }
 
