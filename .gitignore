@@ -81,7 +81,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+#lib/
 !lib/conditional_import/
 lib64/
 parts/
